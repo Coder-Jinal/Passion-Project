@@ -22,6 +22,46 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/JINAL PATEL/source/repos/EventManagementSystem/EventManagementSystem/Views/AttendeePage/ConfirmDelete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXR0ZW5kZWVQYWdlXENvbmZpcm1EZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/JINAL PATEL/source/repos/EventManagementSystem/EventManagementSystem/Views/AttendeePage/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXR0ZW5kZWVQYWdlXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/JINAL PATEL/source/repos/EventManagementSystem/EventManagementSystem/Views/AttendeePage/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXR0ZW5kZWVQYWdlXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/JINAL PATEL/source/repos/EventManagementSystem/EventManagementSystem/Views/AttendeePage/List.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXR0ZW5kZWVQYWdlXExpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/JINAL PATEL/source/repos/EventManagementSystem/EventManagementSystem/Views/AttendeePage/New.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXR0ZW5kZWVQYWdlXE5ldy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/JINAL PATEL/source/repos/EventManagementSystem/EventManagementSystem/Views/EventPage/ConfirmDelete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRQYWdlXENvbmZpcm1EZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/JINAL PATEL/source/repos/EventManagementSystem/EventManagementSystem/Views/EventPage/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRQYWdlXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/JINAL PATEL/source/repos/EventManagementSystem/EventManagementSystem/Views/EventPage/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRQYWdlXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/JINAL PATEL/source/repos/EventManagementSystem/EventManagementSystem/Views/EventPage/List.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRQYWdlXExpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/JINAL PATEL/source/repos/EventManagementSystem/EventManagementSystem/Views/EventPage/New.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRQYWdlXE5ldy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/JINAL PATEL/source/repos/EventManagementSystem/EventManagementSystem/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

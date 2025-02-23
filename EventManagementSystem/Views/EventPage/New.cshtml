@@ -1,0 +1,200 @@
+﻿@model EventManagementSystem.Models.EventDto
+
+@{
+    ViewData["Title"] = "Add New Event";
+}
+
+<h1 class="page-title">Add New Event</h1>
+
+<hr />
+
+<!-- Form container -->
+<div class="form-container">
+    <form id="eventForm" asp-action="Add" onsubmit="return validateForm()">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <!-- Event Name -->
+        <div class="form-group">
+            <label asp-for="EventName" class="control-label">Event Name:</label>
+            <input asp-for="EventName" class="form-control" id="eventName" />
+            <span asp-validation-for="EventName" class="text-danger"></span>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label asp-for="Description" class="control-label">Description:</label>
+            <input asp-for="Description" class="form-control" id="description" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group">
+            <label asp-for="Location" class="control-label">Location:</label>
+            <input asp-for="Location" class="form-control" id="location" />
+            <span asp-validation-for="Location" class="text-danger"></span>
+        </div>
+
+        <!-- Date -->
+        <div class="form-group">
+            <label asp-for="Date" class="control-label">Date:</label>
+            <input asp-for="Date" class="form-control" id="date" />
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-submit" />
+            <a class="btn btn-cancel" asp-action="Index">Cancel</a>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script>
+    function validateForm() {
+        let isValid = true;
+
+        // Get input values
+        let eventName = document.getElementById("eventName").value.trim();
+        let description = document.getElementById("description").value.trim();
+        let location = document.getElementById("location").value.trim();
+        let date = document.getElementById("date").value.trim();
+
+        // Clear previous error messages
+        document.getElementById("eventNameError").innerText = "";
+        document.getElementById("descriptionError").innerText = "";
+        document.getElementById("locationError").innerText = "";
+        document.getElementById("dateError").innerText = "";
+
+        // Event Name Validation
+        if (eventName === "") {
+            document.getElementById("eventNameError").innerText = "This field cannot be empty.";
+            isValid = false;
+        }
+
+        // Description Validation
+        if (description === "") {
+            document.getElementById("descriptionError").innerText = "This field cannot be empty.";
+            isValid = false;
+        }
+
+        // Location Validation
+        if (location === "") {
+            document.getElementById("locationError").innerText = "This field cannot be empty.";
+            isValid = false;
+        }
+
+        // Date Validation
+        if (date === "") {
+            document.getElementById("dateError").innerText = "This field cannot be empty.";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+</script>
+
+<style>
+    /* Global body styling */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Page title */
+    .page-title {
+        font-size: 2rem;
+        text-align: center;
+        margin-top: 20px;
+        color: #343a40;
+    }
+
+    /* Form container */
+    .form-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Form group styling */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            font-weight: bold;
+            color: #495057;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+    }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            outline: none;
+        }
+
+    /* Error message styling */
+    .error-message {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 5px;
+        display: block;
+    }
+
+    /* Submit button styling */
+    .btn-submit {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+
+
+
+    /* Cancel button styling */
+    .btn-cancel {
+        padding: 10px 20px;
+        background-color: #808080;
+        color: white;
+        border: 1px solid #808080 border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-left: 8px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-cancel:hover {
+            background-color: lightgrey;
+            color: black;
+            border-color: #808080;
+        }
+
+        .btn-cancel:focus {
+            outline: none;
+        }
+</style>

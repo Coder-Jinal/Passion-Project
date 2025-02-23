@@ -33,7 +33,9 @@ namespace EventManagementSystem.Models
             public string Description { get; set; }
             public string Location { get; set; }
             public DateTime Date { get; set; }
-        }
+        //public object Payload { get; internal set; }
+    }
+
 
 }
 

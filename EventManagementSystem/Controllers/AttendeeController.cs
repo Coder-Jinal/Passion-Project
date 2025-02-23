@@ -1,14 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using EventManagementSystem;
 using EventManagementSystem.Models;
-using EventManagementSystem.Data;
-using EventManagementSystem.Data.Migrations;
+using EventManagementSystem.Interfaces;
 
 namespace EventManagementSystem.Controllers
 {
@@ -16,47 +10,40 @@ namespace EventManagementSystem.Controllers
     [ApiController]
     public class AttendeeController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAttendeeService _attendeeService;
 
-        public AttendeeController(ApplicationDbContext context)
+        // Dependency injection for attendee service
+        public AttendeeController(IAttendeeService attendeeService)
         {
-            _context = context;
+            _attendeeService = attendeeService;
         }
 
         /// <summary>
-        /// Returns a list of attendees.
+        /// Returns a list of all attendees
         /// </summary>
         /// <returns>
-        /// 200 OK - Returns a list of attendees in JSON format.
+        /// 200 OK
+        /// [{AttendeeDto}, {AttendeeDto}, ...]
         /// </returns>
         /// <example>
-        /// GET: api/Attendee/List -> [{AttendeeDto},{AttendeeDto},..] 
+        /// GET: api/Attendee/List -> [{AttendeeDto}, {AttendeeDto}, ...]
         /// </example>
         [HttpGet("List")]
         public async Task<ActionResult<IEnumerable<AttendeeDto>>> ListAttendees()
         {
-            var Attendees = await _context.Attendees.ToListAsync();
-
-            var AttendeeDtos = Attendees.Select(a => new AttendeeDto
-            {
-                AttendeeId = a.AttendeeId,
-                FirstName = a.FirstName,
-                LastName = a.LastName,
-                Email = a.Email,
-                Phone = a.Phone
-            }).ToList();
-
-            return Ok(AttendeeDtos);
+            var attendees = await _attendeeService.ListAttendees();
+            return Ok(attendees);
         }
 
-
         /// <summary>
-        /// Finds a specific attendee by their ID.
+        /// Returns a single attendee specified by its {id}
         /// </summary>
-        /// <param name="id">The ID of the attendee to find.</param>
+        /// <param name="id">The attendee id</param>
         /// <returns>
-        /// 200 OK - Returns the attendee details if found.  
-        /// 404 Not Found - If no attendee exists with the given ID.
+        /// 200 OK
+        /// {AttendeeDto}
+        /// or
+        /// 404 Not Found
         /// </returns>
         /// <example>
         /// GET: api/Attendee/Find/1 -> {AttendeeDto}
@@ -64,260 +51,179 @@ namespace EventManagementSystem.Controllers
         [HttpGet("Find/{id}")]
         public async Task<ActionResult<AttendeeDto>> FindAttendee(int id)
         {
-            var Attendee = await _context.Attendees.FindAsync(id);
-
-            if (Attendee == null)
-            {
-                return NotFound();
-            }
-
-            var attendeeDto = new AttendeeDto
-            {
-                AttendeeId = Attendee.AttendeeId,
-                FirstName = Attendee.FirstName,
-                LastName = Attendee.LastName,
-                Email = Attendee.Email,
-                Phone = Attendee.Phone
-            };
-
-            return Ok(attendeeDto);
+            var attendee = await _attendeeService.FindAttendee(id);
+            if (attendee == null) return NotFound();
+            return Ok(attendee);
         }
 
         /// <summary>
-        /// Adds a new attendee.
+        /// Adds a new attendee
         /// </summary>
-        /// <param name="attendeeDto">The attendee details to add.</param>
+        /// <param name="attendeeDto">The required information to add the attendee (e.g., Name, Email)</param>
         /// <returns>
-        /// 201 Created - Returns the newly created attendee details with its assigned ID.
+        /// 201 Created
+        /// Location: api/Attendee/Find/{AttendeeId}
+        /// {AttendeeDto}
         /// </returns>
         /// <example>
         /// POST: api/Attendee/Add
-        /// Body: { "FirstName": "John", "LastName": "Doe", "Email": "johndoe@email.com", "Phone": "1234567890" }
-        /// -> 201 Created { AttendeeId: 5, FirstName: "John", ... }
+        /// Request Headers: Content-Type: application/json
+        /// Request Body: {AttendeeDto}
+        /// -> Response Code: 201 Created
+        /// Response Headers: Location: api/Attendee/Find/{AttendeeId}
         /// </example>
         [HttpPost("Add")]
         public async Task<ActionResult<AttendeeDto>> AddAttendee(AttendeeDto attendeeDto)
         {
-            if (attendeeDto == null)
+            if (attendeeDto == null) return BadRequest("Invalid attendee data.");
+
+            var serviceResponse = await _attendeeService.AddAttendee(attendeeDto);
+
+            // Check if the service response or its Payload is null
+            if (serviceResponse == null || serviceResponse.Payload == null)
             {
-                return BadRequest("Invalid event data.");
+                return BadRequest("Failed to create attendee.");
             }
 
-            var attendee = new Attendee
-            {
-                FirstName = attendeeDto.FirstName,
-                LastName = attendeeDto.LastName,
-                Email = attendeeDto.Email,
-                Phone = attendeeDto.Phone
-            };
+            // Access the actual AttendeeDto from Payload
+            var createdAttendee = serviceResponse.Payload;
 
-            _context.Attendees.Add(attendee);
-            await _context.SaveChangesAsync();
-
-            attendeeDto.AttendeeId = attendee.AttendeeId; // Return the generated ID
-
-            return CreatedAtAction(nameof(FindAttendee), new { id = attendee.AttendeeId }, attendeeDto);
+            // Return Created response with the created attendee
+            return CreatedAtAction(nameof(FindAttendee), new { id = createdAttendee.AttendeeId }, createdAttendee);
         }
 
+
         /// <summary>
-        /// Updates an existing attendee.
+        /// Updates an existing attendee
         /// </summary>
-        /// <param name="id">The ID of the attendee to update.</param>
-        /// <param name="attendeeDto">The updated attendee details.</param>
+        /// <param name="id">The ID of the attendee to update</param>
+        /// <param name="attendeeDto">The information to update the attendee (e.g., Name, Email)</param>
         /// <returns>
-        /// 204 No Content - If the update is successful.  
-        /// 400 Bad Request - If the ID does not match the provided attendee data.  
-        /// 404 Not Found - If the attendee does not exist.
+        /// 400 Bad Request
+        /// or
+        /// 404 Not Found
+        /// or
+        /// 204 No Content
         /// </returns>
         /// <example>
-        /// PUT: api/Attendee/Update/1
-        /// Body: { "AttendeeId": 1, "FirstName": "Jane", "LastName": "Doe", "Email": "janedoe@email.com", "Phone": "9876543210" }
+        /// PUT: api/Attendee/Update/5
+        /// Request Headers: Content-Type: application/json
+        /// Request Body: {AttendeeDto}
+        /// -> Response Code: 204 No Content
         /// </example>
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> UpdateAttendee(int id, AttendeeDto attendeeDto)
         {
             if (id != attendeeDto.AttendeeId)
             {
-                return BadRequest();
+                return BadRequest("Attendee ID mismatch.");
             }
 
-            var Attendee = await _context.Attendees.FindAsync(id);
-            if (Attendee == null)
-            {
-                return NotFound();
-            }
-
-            Attendee.FirstName = attendeeDto.FirstName;
-            Attendee.LastName = attendeeDto.LastName;
-            Attendee.Email = attendeeDto.Email;
-            Attendee.Phone = attendeeDto.Phone;
-
-            _context.Entry(Attendee).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AttendeeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            bool updated = await _attendeeService.UpdateAttendee(id, attendeeDto);
+            if (!updated) return NotFound();
 
             return NoContent();
         }
 
         /// <summary>
-        /// Deletes an attendee by ID.
+        /// Deletes an attendee by its ID
         /// </summary>
-        /// <param name="id">The ID of the attendee to delete.</param>
+        /// <param name="id">The ID of the attendee to delete</param>
         /// <returns>
-        /// 204 No Content - If the deletion is successful.  
-        /// 404 Not Found - If the attendee does not exist.
+        /// 204 No Content
+        /// or
+        /// 404 Not Found
         /// </returns>
         /// <example>
-        /// DELETE: api/Attendee/Delete/1
+        /// DELETE: api/Attendee/Delete/7
+        /// -> Response Code: 204 No Content
         /// </example>
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteAttendee(int id)
         {
-            var Attendee = await _context.Attendees.FindAsync(id);
-            if (Attendee == null)
-            {
-                return NotFound();
-            }
-
-            _context.Attendees.Remove(Attendee);
-            await _context.SaveChangesAsync();
+            bool deleted = await _attendeeService.DeleteAttendee(id);
+            if (!deleted) return NotFound();
 
             return NoContent();
         }
 
-        private bool AttendeeExists(int id)
-        {
-            return _context.Attendees.Any(a => a.AttendeeId == id);
-        }
-
         /// <summary>
-        /// Returns a list of events registered by a specific attendee using their {attendeeId}.
+        /// Lists all events for a specific attendee
         /// </summary>
-        /// <param name="attendeeId">The ID of the attendee.</param>
+        /// <param name="attendeeId">The ID of the attendee</param>
         /// <returns>
-        /// 200 OK: A list of events in the format [{EventDto}, {EventDto}, ...]
-        /// 404 Not Found: If no events are found for the given attendee ID.
+        /// 200 OK
+        /// [{EventDto}, {EventDto}, ...]
         /// </returns>
         /// <example>
-        /// GET: api/Attendee/ListEventsForAttendee/7 -> [{EventDto}, {EventDto}, ...]
+        /// GET: api/Attendee/ListEventsForAttendee/3 -> [{EventDto}, {EventDto}, ...]
         /// </example>
-
         [HttpGet("ListEventsForAttendee/{attendeeId}")]
         public async Task<IActionResult> ListEventsForAttendee(int attendeeId)
         {
-            var events = await _context.EventAttendees
-                .Where(ea => ea.AttendeeId == attendeeId)
-                .Select(ea => new EventDto
-                {
-                    EventId = ea.Event.EventId,
-                    EventName = ea.Event.EventName,
-                    Description = ea.Event.Description,
-                    Location = ea.Event.Location,
-                    Date = ea.Event.Date
-                })
-                .ToListAsync();
-
-            if (!events.Any())
+            var events = await _attendeeService.ListEventsForAttendee(attendeeId);
+            if (events == null || events.Count() == 0)  // Ensure Count() is invoked
             {
                 return NotFound($"No events found for attendee with ID {attendeeId}.");
             }
-
             return Ok(events);
         }
 
+
         /// <summary>
-        /// Links an attendee to an event (Registers the attendee)
+        /// Links an attendee to an event
         /// </summary>
         /// <param name="attendeeId">The ID of the attendee</param>
         /// <param name="eventId">The ID of the event</param>
-        /// <returns>204 No Content or 404 Not Found</returns>
+        /// <returns>
+        /// 204 No Content
+        /// or
+        /// 404 Not Found
+        /// </returns>
         /// <example>
-        /// POST: api/Attendee/Link?attendeeId=2&eventId=5
-        /// Response Code: 204 No Content
+        /// POST: api/Attendee/Link?attendeeId=4&eventId=12
+        /// -> Response Code: 204 No Content
         /// </example>
-
         [HttpPost("Link")]
-        public async Task<ActionResult> Link(int attendeeId, int eventId)
+        public async Task<IActionResult> LinkAttendeeToEvent(int attendeeId, int eventId)
         {
-            // Check if Attendee Exists
-            var attendee = await _context.Attendees.FindAsync(attendeeId);
-            if (attendee == null)
-            {
-                return NotFound("Attendee not found.");
-            }
+            var response = await _attendeeService.LinkAttendeeToEvent(attendeeId, eventId);
 
-            // Check if Event Exists
-            var eventEntity = await _context.Events.FindAsync(eventId);
-            if (eventEntity == null)
-            {
-                return NotFound("Event not found.");
-            }
+            if (response.Status == Models.ServiceResponse.ServiceStatus.NotFound)
+                return NotFound(response.Messages);
 
-            // Check if Attendee is Already Registered for the Event
-            bool alreadyRegistered = await _context.EventAttendees
-                .AnyAsync(ea => ea.AttendeeId == attendeeId && ea.EventId == eventId);
+            if (response.Status == Models.ServiceResponse.ServiceStatus.Error)
+                return BadRequest(response.Messages);
 
-            if (alreadyRegistered)
-            {
-                return BadRequest("Attendee is already registered for this event.");
-            }
-
-            // Create and Save the New EventAttendee Record
-            var eventAttendee = new EventAttendee
-            {
-                AttendeeId = attendeeId,
-                EventId = eventId,
-                RegistrationDate = DateTime.UtcNow
-            };
-
-            _context.EventAttendees.Add(eventAttendee);
-            await _context.SaveChangesAsync();
-
-            return NoContent();  // 204 No Content (Successful, but no response body)
+            return NoContent(); 
         }
 
+
         /// <summary>
-        /// Unlinks an attendee from an event (Removes the attendee)
+        /// Unlinks an attendee from an event
         /// </summary>
         /// <param name="attendeeId">The ID of the attendee</param>
         /// <param name="eventId">The ID of the event</param>
-        /// <returns>204 No Content or 404 Not Found</returns>
+        /// <returns>
+        /// 204 No Content
+        /// or
+        /// 404 Not Found
+        /// </returns>
         /// <example>
-        /// DELETE: api/Attendee/Unlink?attendeeId=2&eventId=5
-        /// Response Code: 204 No Content
+        /// DELETE: api/Attendee/Unlink?attendeeId=4&eventId=12
+        /// -> Response Code: 204 No Content
         /// </example>
-
         [HttpDelete("Unlink")]
-        public async Task<ActionResult> Unlink(int attendeeId, int eventId)
+        public async Task<ActionResult> UnlinkAttendeeFromEvent(int attendeeId, int eventId)
         {
-        // Find the EventAttendee record
-        var eventAttendee = await _context.EventAttendees
-            .FirstOrDefaultAsync(ea => ea.AttendeeId == attendeeId && ea.EventId == eventId);
+            var response = await _attendeeService.UnlinkAttendeeFromEvent(attendeeId, eventId);
 
-        if (eventAttendee == null)
-        {
-            return NotFound("Attendee is not registered for this event.");
+            if (response.Status == Models.ServiceResponse.ServiceStatus.NotFound)
+                return NotFound(response.Messages);
+
+            return NoContent();
         }
 
-        // Remove the Attendee from the Event
-        _context.EventAttendees.Remove(eventAttendee);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
-        }
     }
 }
+

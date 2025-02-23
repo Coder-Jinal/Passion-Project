@@ -69,7 +69,7 @@
   },
   {
     "ContainingType": "EventManagementSystem.Controllers.AttendeeController",
-    "Method": "Link",
+    "Method": "LinkAttendeeToEvent",
     "RelativePath": "api/Attendee/Link",
     "HttpMethod": "POST",
     "IsController": true,
@@ -126,7 +126,7 @@
   },
   {
     "ContainingType": "EventManagementSystem.Controllers.AttendeeController",
-    "Method": "Unlink",
+    "Method": "UnlinkAttendeeFromEvent",
     "RelativePath": "api/Attendee/Unlink",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -167,7 +167,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "EventManagementSystem.Controllers.EventController",
+    "ContainingType": "EventController",
     "Method": "AddEvent",
     "RelativePath": "api/Event/Add",
     "HttpMethod": "POST",
@@ -193,7 +193,7 @@
     ]
   },
   {
-    "ContainingType": "EventManagementSystem.Controllers.EventController",
+    "ContainingType": "EventController",
     "Method": "DeleteEvent",
     "RelativePath": "api/Event/Delete/{id}",
     "HttpMethod": "DELETE",
@@ -209,7 +209,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "EventManagementSystem.Controllers.EventController",
+    "ContainingType": "EventController",
     "Method": "FindEvent",
     "RelativePath": "api/Event/Find/{id}",
     "HttpMethod": "GET",
@@ -235,7 +235,7 @@
     ]
   },
   {
-    "ContainingType": "EventManagementSystem.Controllers.EventController",
+    "ContainingType": "EventController",
     "Method": "ListEvents",
     "RelativePath": "api/Event/List",
     "HttpMethod": "GET",
@@ -255,7 +255,7 @@
     ]
   },
   {
-    "ContainingType": "EventManagementSystem.Controllers.EventController",
+    "ContainingType": "EventController",
     "Method": "ListAttendeesForEvent",
     "RelativePath": "api/Event/ListAttendeesForEvent/{eventId}",
     "HttpMethod": "GET",
@@ -271,7 +271,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "EventManagementSystem.Controllers.EventController",
+    "ContainingType": "EventController",
     "Method": "UpdateEvent",
     "RelativePath": "api/Event/Update/{id}",
     "HttpMethod": "PUT",
@@ -307,7 +307,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "EventManagementSystem.Models.EventAttendee",
+        "Type": "EventManagementSystem.Models.eventattendeeDto",
         "MediaTypes": [
           "text/plain",
           "application/json",

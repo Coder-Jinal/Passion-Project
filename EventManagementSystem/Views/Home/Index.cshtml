@@ -2,7 +2,118 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="hero-section">
+    <div class="hero-content">
+        <h1>Welcome to the Event Management System</h1>
+        <p>Effortlessly organize and manage your events with our comprehensive platform.</p>
+    </div>
 </div>
+
+<div class="features-section">
+    <h2>Key Features</h2>
+    <div class="features-list">
+        <div class="feature-card">
+            <h3>Seamless Event Creation</h3>
+            <p>Create and manage events with ease, from small meetups to large-scale conferences.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Real-Time Updates</h3>
+            <p>Keep attendees informed with automatic updates and notifications.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Event Registrations & Account Management</h3>
+            <p>Register for events and manage your accounts effortlessly.</p>
+        </div>
+    </div>
+</div>
+
+<div class="about-section">
+    <h2>About Our Event Management System</h2>
+    <p>Our platform provides a hassle-free experience for event organizers, ensuring smooth operations for all types of gatherings.</p>
+</div>
+
+<div class="testimonials-section">
+    <h2>What Our Users Say</h2>
+    <div class="testimonial-card">
+        <p>"This platform made event management so much simpler! We had a seamless experience tracking registrations and sending updates." - Jane D.</p>
+    </div>
+    <div class="testimonial-card">
+        <p>"The intuitive interface and analytics helped us organize an amazing event!" - Mark R.</p>
+    </div>
+</div>
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+    }
+
+    .hero-section {
+        background: linear-gradient(to right, #007bff, #6610f2);
+        color: white;
+        text-align: center;
+        padding: 80px 20px;
+    }
+
+    .hero-content h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+
+    .hero-content p {
+        font-size: 1.2em;
+        margin: 0 auto;
+    }
+
+    .about-section, .features-section, .testimonials-section, .cta-section {
+        text-align: center;
+        padding: 50px 20px;
+        background: white;
+        margin: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .testimonials-section{
+        margin-bottom: 8em;
+    }
+
+    .features-section {
+        background: #e3f2fd;
+    }
+
+    .features-list {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+    .feature-card {
+        background: white;
+        padding: 20px;
+        margin: 10px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 30%;
+    }
+
+    .testimonial-card {
+        background: #f1f1f1;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 10px;
+    }
+
+    .btn-primary {
+        display: inline-block;
+        padding: 10px 20px;
+        color: white;
+        background: #007bff;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 1.2em;
+        margin-top: 20px;
+    }
+</style>

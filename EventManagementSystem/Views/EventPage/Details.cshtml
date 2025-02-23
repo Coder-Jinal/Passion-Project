@@ -1,0 +1,119 @@
+﻿@model EventManagementSystem.Models.ViewModels.EventDetails
+
+@{
+    ViewData["Title"] = "View The Details";
+}
+
+<div class="container">
+    <div class="text-center">
+        <h1 class="display-4">@ViewData["Title"]</h1>
+    </div>
+
+    <!-- Event Information -->
+    <div class="card shadow-lg p-4 my-4">
+        <div class="card-header bg-primary text-white text-center">
+            <h3 class="mb-0">Event Information</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Event Name:</strong> @Model.Event.EventName</p>
+                    <p><strong>Description:</strong> @Model.Event.Description</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Location:</strong> @Model.Event.Location</p>
+                    <p><strong>Date:</strong> @Model.Event.Date</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registered Attendees Section -->
+    <div class="card shadow-lg p-4 my-4">
+        <div class="card-header bg-success text-white text-center">
+            <h3 class="mb-0">Registered Attendees</h3>
+        </div>
+        <div class="card-body">
+            @if (Model.RegisteredAttendees.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var AttendeeDto in Model.RegisteredAttendees)
+                    {
+                        <li class="list-group-item">
+                            @AttendeeDto.FirstName @AttendeeDto.LastName
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted text-center">No attendees registered.</p>
+            }
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="text-center mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.Event.EventId" class="btn btn-warning btn-lg mx-2">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+        <a asp-action="Index" class="btn btn-secondary btn-lg">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<style>
+    h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        border-radius: 12px;
+        border: none;
+    }
+
+    .card-header {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .btn-lg {
+        padding: 12px 25px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        border-radius: 8px;
+    }
+
+    .table {
+        margin-top: 20px;
+    }
+
+    .list-group-item {
+        padding: 15px;
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+        border: none;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border: none;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+    .text-muted {
+        font-size: 1.1rem;
+        font-style: italic;
+    }
+</style>

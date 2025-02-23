@@ -1,0 +1,158 @@
+﻿@model IEnumerable<EventManagementSystem.Models.EventDto>
+
+@{
+    ViewData["Title"] = "List of Events";
+}
+
+<h1 class="page-title">List of Events</h1>
+
+<div class="table-container">
+    <table class="event-table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.First().EventName)</th>
+                <th>@Html.DisplayNameFor(model => model.First().Description)</th>
+                <th>@Html.DisplayNameFor(model => model.First().Location)</th>
+                <th>@Html.DisplayNameFor(model => model.First().Date)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.EventName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                    <td class="action-buttons">
+                        <a class="btn btn-details" asp-action="Details" asp-route-id="@item.EventId">Details</a>
+                        <a class="btn btn-edit" asp-action="Edit" asp-route-id="@item.EventId">Edit</a>
+                        <a class="btn btn-delete" asp-action="ConfirmDelete" asp-route-id="@item.EventId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<p>
+    <a class="btn btn-new" asp-action="New">Add New Event</a>
+</p>
+
+<!-- Embedded CSS -->
+<style>
+    /* Global styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        text-align: center;
+        margin-top: 20px;
+        color: #333;
+    }
+
+    .table-container {
+        width: 80%;
+        margin: 20px auto;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    /* Table styles */
+    .event-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .event-table th, .event-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .event-table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .event-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .event-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+    /* Action buttons styling */
+    .action-buttons {
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px; /* Space between buttons */
+    }
+
+    /* Button styles */
+    .btn {
+        text-decoration: none;
+        padding: 6px 12px;
+        margin: 5px;
+        border-radius: 4px;
+        color: white;
+    }
+
+    .btn-details {
+        background-color: #28a745;
+    }
+
+    .btn-edit {
+        background-color: #ffc107;
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+    }
+
+    .btn-new {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 15px;
+        display: inline-block;
+        border-radius: 5px;
+    }
+
+    /* Button hover effects */
+    .btn:hover {
+        opacity: 0.8;
+    }
+
+    .btn-new:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-details:hover {
+        background-color: #218838;
+    }
+
+    .btn-edit:hover {
+        background-color: #e0a800;
+    }
+
+    .btn-delete:hover {
+        background-color: #c82333;
+    }
+
+    /* Centering Add New Button */
+    p {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        margin-bottom: 4rem;
+    }
+</style>
